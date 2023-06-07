@@ -1,2 +1,2 @@
 #!/bin/bash
-ls -Ap1
+ls -xamp

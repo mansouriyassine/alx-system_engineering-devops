@@ -1,23 +1,35 @@
 #!/usr/bin/env bash
-# Process and PID file
-pid_file="/var/run/myscript.pid"
+# File to store PID
+pid_file=/var/run/my_process.pid
 
-cleanup() {
-    echo "I hate the kill command"
-    rm -f "$pid_file"
-    exit
-}
+if [ "$1" == "start" ]; then
+if [ -f "$pid_file" ]; then
+echo "manage_my_process is already running."
+else
+./manage_my_process &
+echo $! > "$pid_file"
+echo "manage_my_process started"
+fi
+elif [ "$1" == "stop" ]; then
+if [ -f "$pid_file" ]; then
+process_pid=$(cat "$pid_file")
+pkill -F "$pid_file"
+rm "$pid_file"
+echo "manage_my_process stopped"
+else
+echo "manage_my_process is not running."
+fi
+elif [ "$1" == "restart" ]; then
+if [ -f "$pid_file" ]; then
+process_pid=$(cat "$pid_file")
+pkill -F "$pid_file"
+rm "$pid_file"
+echo "manage_my_process stopped"
+fi
 
-handle_sigint() {
-    echo "Y U no love me?!"
-}
-
-trap 'cleanup' SIGTERM SIGQUIT
-trap 'handle_sigint' SIGINT
-
-echo $$ > "$pid_file"
-
-while true; do
-    echo "To infinity and beyond"
-    sleep 2
-done
+./manage_my_process &
+echo $! > "$pid_file"
+echo "manage_my_process restarted"
+else
+echo "Usage: $0 {start|stop|restart}"
+fi

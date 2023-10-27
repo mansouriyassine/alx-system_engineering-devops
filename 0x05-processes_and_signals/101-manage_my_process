@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # File to store PID
 pid_file=/var/run/my_process.pid
 

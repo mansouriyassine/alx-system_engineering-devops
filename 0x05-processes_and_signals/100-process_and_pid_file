@@ -1,28 +1,22 @@
-#!/bin/bash
-
-# Define the PID file path
+#!/usr/bin/env bash
+# Process and PID file
 pid_file="/var/run/myscript.pid"
 
-# Function to handle cleanup
 cleanup() {
     echo "I hate the kill command"
     rm -f "$pid_file"
     exit
 }
 
-# Function to handle SIGINT
 handle_sigint() {
     echo "Y U no love me?!"
 }
 
-# Trap signals
 trap 'cleanup' SIGTERM SIGQUIT
 trap 'handle_sigint' SIGINT
 
-# Create the PID file
 echo $$ > "$pid_file"
 
-# Main loop
 while true; do
     echo "To infinity and beyond"
     sleep 2

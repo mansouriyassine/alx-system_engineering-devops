@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# This script demonstrates the Highlander behavior.
+
+# Define a function to respond to SIGTERM signal
+function respond_to_sigterm {
+    echo "I am invincible!!!"
+    exit
+}
+
+# Set up a trap to call the function on SIGTERM
+trap 'respond_to_sigterm' SIGTERM
+
+# Loop indefinitely, displaying the message and sleeping for 2 seconds between each iteration
+while true; do
+    echo "To infinity and beyond"
+    sleep 2
+done

@@ -1,48 +1,35 @@
-#!/usr/bin/env bash
-# Manage my process
+#!/bin/bash
+# File to store PID
+pid_file=/var/run/my_process.pid
 
-SCRIPT_PATH="/path/to/manage_my_process"
+if [ "$1" == "start" ]; then
+if [ -f "$pid_file" ]; then
+echo "manage_my_process is already running."
+else
+./manage_my_process &
+echo $! > "$pid_file"
+echo "manage_my_process started"
+fi
+elif [ "$1" == "stop" ]; then
+if [ -f "$pid_file" ]; then
+process_pid=$(cat "$pid_file")
+pkill -F "$pid_file"
+rm "$pid_file"
+echo "manage_my_process stopped"
+else
+echo "manage_my_process is not running."
+fi
+elif [ "$1" == "restart" ]; then
+if [ -f "$pid_file" ]; then
+process_pid=$(cat "$pid_file")
+pkill -F "$pid_file"
+rm "$pid_file"
+echo "manage_my_process stopped"
+fi
 
-start() {
-    if [ -f /var/run/my_process.pid ]; then
-        echo "manage_my_process is already running."
-        return 1
-    fi
-
-    $SCRIPT_PATH &
-    echo $! > /var/run/my_process.pid
-    echo "manage_my_process started"
-}
-
-stop() {
-    if [ -f /var/run/my_process.pid ]; then
-        PID=$(cat /var/run/my_process.pid)
-        kill $PID
-        rm /var/run/my_process.pid
-        echo "manage_my_process stopped"
-    else
-        echo "manage_my_process is not running."
-    fi
-}
-
-restart() {
-    stop
-    start
-    echo "manage_my_process restarted"
-}
-
-case $1 in
-    start)
-        start
-        ;;
-    stop)
-        stop
-        ;;
-    restart)
-        restart
-        ;;
-    *)
-        echo "Usage: $0 {start|stop|restart}"
-        exit 1
-        ;;
-esac
+./manage_my_process &
+echo $! > "$pid_file"
+echo "manage_my_process restarted"
+else
+echo "Usage: $0 {start|stop|restart}"
+fi

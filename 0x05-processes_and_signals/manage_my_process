@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-
+# The script to manage the process
 while true; do
-    echo "I am alive!" >> /tmp/my_process
-    sleep 2
+sudo bash -c "echo 'I am alive!' >> /tmp/my_process"
+sleep 2
 done

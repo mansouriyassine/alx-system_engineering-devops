@@ -1,21 +1,26 @@
 #!/bin/bash
-# This script manages its PID, displays messages, and responds to signals.
 
 # Define the PID file path
-pid_file=/var/run/myscript.pid
+pid_file="/var/run/myscript.pid"
 
-# Function to clean up and exit
+# Function to handle cleanup
 cleanup() {
-    sudo rm -f $pid_file
+    echo "I hate the kill command"
+    rm -f "$pid_file"
     exit
 }
 
-# Signal handlers
-trap 'cleanup' SIGQUIT SIGTERM
-trap 'echo "Y U no love me?!"' SIGINT
+# Function to handle SIGINT
+handle_sigint() {
+    echo "Y U no love me?!"
+}
+
+# Trap signals
+trap 'cleanup' SIGTERM SIGQUIT
+trap 'handle_sigint' SIGINT
 
 # Create the PID file
-sudo bash -c "echo $$ > $pid_file"
+echo $$ > "$pid_file"
 
 # Main loop
 while true; do

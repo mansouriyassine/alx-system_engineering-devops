@@ -2,7 +2,7 @@
 # This script manages its PID, displays messages, and responds to signals.
 
 # Define the PID file path
-pid_file=/var/run/my_script.pid
+pid_file=/var/run/myscript.pid
 
 # Function to clean up and exit
 cleanup() {

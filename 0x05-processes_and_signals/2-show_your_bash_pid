@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# This script displays the PID of your Bash process.
+
+ps aux | grep 'bash' | grep -v 'grep' | grep -v "$$"

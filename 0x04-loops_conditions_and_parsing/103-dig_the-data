@@ -2,4 +2,4 @@
 # Group visitors by IP and HTTP status code and display the data
 
 log_file="apache-access.log"
-awk '{ print $1 " " $9 }' "$log_file" | sort | uniq -c | sort -k1,1nr
+awk '{ print $1 " " $9}' $log_file | sort | uniq -c | sort -rn

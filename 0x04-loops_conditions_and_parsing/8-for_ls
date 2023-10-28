@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# This script displays directory contents in a list format with names after the first dash.
+
+for item in *; do
+  if [ -d "$item" ] && [ ! "$item" = .* ]; then
+    name="${item#*-}"
+    echo "$name"
+  fi
+done

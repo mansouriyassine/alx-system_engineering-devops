@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Display the story of users from /etc/passwd
 
-while IFS=":" read -r username _ uid _ home shell _; do
-    echo "The user $username is part of the $uid gang, lives in $home and rides $shell. $uid's place is protected by the passcode x, more info about the user here: $username"
-done < /etc/passwd
+passwd_file="/etc/passwd"
+
+while IFS=":" read -r username passwd uid gid info homedir shell; do
+    echo "The user $username is part of the $gid gang, lives in $homedir and rides $shell. $uid's place is protected by the passcode $passwd, more info about the user here: $info"
+done < "$passwd_file"

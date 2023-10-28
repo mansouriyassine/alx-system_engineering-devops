@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
-# Displays directory contents in a list format with names after the first dash.
+# Display directory contents in a list format, showing only the part of the name after the first dash.
 
-for item in *; do
-  if [[ -d "$item" && ! "$item" = .* ]]; then
-    name="${item#*-}"
-    echo "$name"
-  fi
+for item in *
+do
+    extracted_name=$(echo "$item" | cut -d'-' -f2)
+    echo "$extracted_name"
 done

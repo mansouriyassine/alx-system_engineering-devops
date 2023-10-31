@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
-# Check if the first argument matches the regular expression pattern
-if ARGV[0] =~ /^\d{10}$/
-  puts ARGV[0].scan(/^\d{10}$/).join
+# checks if the provided argument is a 10-digit phone number.
+if ARGV[0] =~ /^[0-9]{10}$/
+  puts ARGV[0].scan(/^[0-9]{10}$/).join
 else
   puts ""
 end

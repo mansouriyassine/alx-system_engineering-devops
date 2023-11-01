@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Change the IP addresses for localhost and Facebook
+
+new_facebook_ip="8.8.8.8"
+new_localhost_ip="127.0.0.2"
+
+hosts_file="/etc/hosts"
+temp_hosts_file="$HOME/hosts.new"
+cp "$hosts_file" "$temp_hosts_file"
+sed -i "s/127.0.0.1/$new_localhost_ip/g" "$temp_hosts_file"
+echo "$new_facebook_ip facebook.com" >> "$temp_hosts_file"
+cp -f "$temp_hosts_file" "$hosts_file"
+rm -f "$temp_hosts_file"
+echo "IP addresses updated successfully!"

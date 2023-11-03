@@ -1,3 +1,9 @@
 #!/usr/bin/env bash
-# Listen on port 98 on localhost using netcat
-ip a | grep "scope" | grep -Po '(?<=inet )[\d.]+'
+# Listen on port 98 on localhost
+
+if ! command -v nc &>/dev/null; then
+    echo "Netcat (nc) is not installed. Please install it to use this script."
+    exit 1
+fi
+
+nc -l -p 98 -k -e /bin/cat

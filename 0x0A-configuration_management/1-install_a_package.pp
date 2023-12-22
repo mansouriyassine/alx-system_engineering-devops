@@ -1,12 +1,16 @@
-# 1-install_a_package.pp
-
-# Ensure pip3 is installed
 package { 'python3-pip':
   ensure => installed,
 }
 
-# Install Flask 2.1.0 using pip3 as the provider
+exec { 'upgrade-pip':
+  command => 'pip3 install --upgrade pip',
+  path    => ['/usr/bin', '/bin'],
+  unless  => 'pip3 --version | grep "pip [latest version here]"',
+  require => Package['python3-pip'],
+}
+
 package { 'Flask':
   ensure   => '2.1.0',
   provider => 'pip3',
+  require  => Exec['upgrade-pip'],
 }

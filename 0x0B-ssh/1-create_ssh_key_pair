@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 # This script creates a 4096-bit RSA key pair with the name 'school' and passphrase 'betty'
 
-ssh-keygen -t rsa -b 4096 -C "school" -f school -N "betty"
+ssh-keygen -f school -b 4096 -N betty

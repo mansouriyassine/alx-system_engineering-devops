@@ -2,5 +2,5 @@
 # Installs Nginx and configures a custom HTML page
 apt-get update
 apt-get install -y nginx
-echo "Holberton School" > /var/www/html/index.html
+echo "Hello World!" > /var/www/html/index.html
 service nginx start

@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+# Configures Nginx to redirect a specific path to another URL with a 301 Moved Permanently response
+
+# Install Nginx
+if ! which nginx > /dev/null 2>&1; then
+    apt-get update
+    apt-get install nginx -y
+fi
+
+# Create or modify the server block configuration
+cat > /etc/nginx/sites-available/default <<EOF
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    root /var/www/html;
+    index index.html index.htm index.nginx-debian.html;
+
+    server_name _;
+
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
+
+    location /redirect_me {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+    }
+}
+EOF
+
+# Restart Nginx
+service nginx restart

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Installs Nginx and sets up a custom HTML page
-apt-get update
-apt-get install nginx -y
+apt-get -y update
+apt-get -y install nginx
 echo "Hello World!" > /var/www/html/index.html
 service nginx restart

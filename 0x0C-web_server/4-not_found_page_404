@@ -1,26 +1,49 @@
 #!/usr/bin/env bash
-# Configures Nginx to serve a custom 404 page and a specific redirection
-apt-get update
-apt-get install -y nginx
-service nginx start
-echo "Hello World!" > /var/www/html/index.html
-echo "Ceci n'est pas une page" > /var/www/html/custom_404.html
-cat > /etc/nginx/sites-available/default << EOF
-server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
-    root /var/www/html;
-    index index.html;
-    location / {
-        try_files \$uri \$uri/ =404;
-    }
-    location /redirect_me {
-        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
-    }
-    error_page 404 /custom_404.html;
-    location = /custom_404.html {
-        internal;
-    }
+# Sets up Nginx with a custom 404 page and a redirect rule
+
+sudo apt-get update
+sudo apt-get -y install nginx
+
+# Allow HTTP traffic
+ufw allow 'Nginx HTTP'
+
+# Set appropriate permissions for the web root
+chmod -R 755 /var/www
+
+# Index page
+echo 'Hello World' > /var/www/html/index.html
+
+# Define configuration
+new_config=\
+"server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+               root /var/www/html;
+        index index.html index.htm index.nginx-debian.html;
+        server_name _;
+        location / {
+                try_files \$uri \$uri/ =404;
+        }
+        error_page 404 /404.html;
+        location  /404.html {
+            internal;
+        }
+        
+        if (\$request_filename ~ redirect_me){
+            rewrite ^ https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;
+        }
 }
-EOF
-service nginx restart
+"
+
+# Create 404 page
+echo "Ceci n'est pas une page" > /var/www/html/404.html
+
+# Apply the new Nginx configuration
+echo "$new_config" > /etc/nginx/sites-available/default
+
+if [ "$(pgrep nginx)" -le 0 ];
+then
+    service nginx start
+else
+    service nginx restart
+fi;

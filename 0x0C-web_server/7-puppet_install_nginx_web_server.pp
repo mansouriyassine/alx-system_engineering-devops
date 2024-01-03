@@ -1,39 +1,29 @@
-# 7-puppet_install_nginx_web_server.pp
-class nginx_install {
-
-  # Ensure Nginx package is installed
-  package { 'nginx':
-    ensure => installed,
-  }
-
-  # Ensure Nginx service is running and enabled
-  service { 'nginx':
-    ensure => running,
-    enable => true,
-    require => Package['nginx'],
-    subscribe => File['/etc/nginx/sites-available/default'],
-  }
-
-  # Serve a custom hello world page
-  file { '/var/www/html/index.html':
-    ensure  => present,
-    content => "Hello World!\n",
-    require => Package['nginx'],
-  }
-
-  # Custom 404 page content
-  file { '/var/www/html/custom_404.html':
-    ensure  => present,
-    content => "Ceci n'est pas une page\n",
-    require => Package['nginx'],
-  }
-
-  # Configure Nginx to serve the custom pages and setup redirection
-  file { '/etc/nginx/sites-available/default':
-    ensure  => present,
-    content => template('nginx/default.conf.erb'),
-    notify  => Service['nginx'],
-  }
+# Install and config the nginx
+package { 'nginx':
+  ensure => installed,
 }
 
-include nginx_install
+# Create the 'Hello World!' index.html page
+file { '/var/www/html/index.html':
+  ensure  => file,
+  content => "Hello World!\n",
+  require => Package['nginx'],
+}
+
+# Ensure the custom Nginx server block configuration for redirect
+file_line { 'nginx_redirect':
+  ensure  => present,
+  path    => '/etc/nginx/sites-available/default',
+  after   => 'server_name _;',
+  line    => 'rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;',
+  match   => '^rewrite ^/redirect_me',
+  require => Package['nginx'],
+  notify  => Service['nginx'],
+}
+
+# Ensure the Nginx service is running
+service { 'nginx':
+  ensure  => running,
+  enable  => true,
+  require => Package['nginx'],
+}

@@ -1,0 +1,22 @@
+# default.conf.erb
+server {
+  listen 80 default_server;
+  listen [::]:80 default_server;
+  root /var/www/html;
+  index index.html index.htm;
+
+  server_name _;
+
+  location / {
+    try_files $uri $uri/ =404;
+  }
+
+  location /redirect_me {
+    return 301 https://www.example.com;
+  }
+
+  error_page 404 /custom_404.html;
+  location = /custom_404.html {
+    internal;
+  }
+}

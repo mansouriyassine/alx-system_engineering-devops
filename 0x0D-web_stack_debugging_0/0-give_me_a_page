@@ -1,18 +1,8 @@
 #!/usr/bin/env bash
 # This script is intended to fix the web server and serve a specific page
-
-# Ensure Apache is installed and running
 which apache2 >/dev/null || (apt-get update && apt-get install -y apache2)
-
-# Start Apache service in case it is not already running
 service apache2 start
-
-# Create the index.html file with the required content
 echo "Hello Holberton" > /var/www/html/index.html
-
-# Set proper permissions for the web root to ensure Apache can serve the page
 chown -R www-data:www-data /var/www/html/
 chmod -R 755 /var/www/html/
-
-# Restart Apache service to apply changes
 service apache2 restart

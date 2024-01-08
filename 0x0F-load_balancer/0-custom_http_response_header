@@ -1,8 +1,28 @@
-# script configures Nginx to add a custom header 'X-Served-By' with the hostname of the server
-apt-get -y update
-apt-get -y install nginx
+#!/usr/bin/env bash
+# This script configures an Nginx server with a custom header 'X-Served-By'
+
+# Update package list and install Nginx if not installed
+apt-get update -y
+apt-get install -y nginx
+
+# Create a simple page for index.html
 echo "Hello World!" > /var/www/html/index.nginx-debian.html
+
+# Set up a custom 404 page error
 echo "Ceci n'est pas une page" > /usr/share/nginx/html/custom_404.html
-sed -i "s/server_name _;/server_name _;\n\trewrite ^\/redirect_me https:\/\/github.com\/mansouriyassine permanent;\n\n\terror_page 404 \/custom_404.html;\n\tlocation = \/custom_404.html {\n\t\troot \/usr\/share\/nginx\/html;\n\t\tinternal;\n\t}/" /etc/nginx/sites-available/default
-sed -i "s/include \/etc\/nginx\/sites-enabled\/\*;/include \/etc\/nginx\/sites-enabled\/\*;\n\tadd_header X-Served-By \"$HOSTNAME\";/" /etc/nginx/nginx.conf
+
+# Configure Nginx to serve the custom error page and add the 'X-Served-By' header
+# Ensure that configurations are idempotent: not repeated or duplicated upon multiple script runs
+
+# Add redirect and custom 404 page if not already present
+if ! grep -q "rewrite ^/redirect_me" /etc/nginx/sites-available/default; then
+    sed -i "/server_name _;/a \\\trewrite ^\/redirect_me https:\/\/github.com\/mansouriyassine permanent;\n\terror_page 404 \/custom_404.html;\n\tlocation = \/custom_404.html {\n\t\troot \/usr\/share\/nginx\/html;\n\t\tinternal;\n\t}" /etc/nginx/sites-available/default
+fi
+
+# Add the custom header if not already present
+if ! grep -q "add_header X-Served-By" /etc/nginx/nginx.conf; then
+    sed -i "/http {/a \\\tadd_header X-Served-By \"\$HOSTNAME\";" /etc/nginx/nginx.conf
+fi
+
+# Restart Nginx to apply changes
 service nginx restart

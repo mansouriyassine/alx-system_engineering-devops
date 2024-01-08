@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# This script configures Nginx to add a custom header 'X-Served-By' with the hostname of the server
+
+sudo apt-get update
+
+sudo apt-get install -y nginx
+
+sudo systemctl enable nginx
+
+sudo systemctl start nginx
+
+HOSTNAME=$(hostname)
+
+sudo sed -i "/^\s*location \/ {/a \\t\\tadd_header X-Served-By $HOSTNAME;" /etc/nginx/sites-available/default
+
+sudo systemctl restart nginx

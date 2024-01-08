@@ -1,37 +1,31 @@
-# task 2 Puppet manifest to configure Nginx with a custom HTTP header
 
-class nginx_custom_header {
-  package { 'nginx':
-    ensure => installed,
-  }
 
-  file { '/var/www/html/index.nginx-debian.html':
-    ensure  => file,
-    content => "Hello World!\n",
-    require => Package['nginx'],
-  }
+fest for setting up Nginx with a custom HTTP header
 
-  file { '/usr/share/nginx/html/custom_404.html':
-    ensure  => file,
-    content => "Ceci n'est pas une page\n",
-    require => Package['nginx'],
-  }
-
-  exec { 'nginx_rewrite_rule':
-    command => "sed -i 's/server_name _;/server_name _;\\n\\trewrite ^\\/redirect_me https:\\/\\/github.com\\/ChidiChuks permanent;\\n\\n\\terror_page 404 \\/custom_404.html;\\n\\tlocation = \\/custom_404.html {\\n\\t\\troot \\/usr\\/share\\/nginx\\/html;\\n\\t\\tinternal;\\n\\t}/' /etc/nginx/sites-available/default",
-    require => Package['nginx'],
-  }
-
-  exec { 'nginx_custom_header':
-    command => "sed -i 's/include \\/etc\\/nginx\\/sites-enabled\\/*;/include \\/etc\\/nginx\\/sites-enabled\\/*;\\n\\tadd_header X-Served-By \"$HOSTNAME\";/' /etc/nginx/nginx.conf",
-    require => Package['nginx'],
-  }
-
-  service { 'nginx':
-    ensure  => running,
-    enable  => true,
-    require => Exec['nginx_custom_header'],
-  }
+exec { 'system_update':
+  command => '/usr/bin/apt-get update',
+  path    => ['/bin', '/usr/bin'],
+  before  => Exec['nginx_installation'],
 }
 
-include nginx_custom_header
+exec { 'nginx_installation':
+  command => '/usr/bin/apt-get install -y nginx',
+  path    => ['/bin', '/usr/bin'],
+  unless  => '/usr/bin/dpkg -l | grep nginx',
+  before  => Exec['header_setup'],
+}
+
+exec { 'header_setup':
+  command     => "/bin/sed -i '/^\tinclude \/etc\/nginx\/sites-enabled\/\*/a \\tadd_header X-Served-By \"\$HOSTNAME\";' /etc/nginx/nginx.conf",
+  path        => ['/bin', '/usr/bin'],
+  refreshonly => true,
+  subscribe   => Exec['nginx_installation'],
+  before      => Exec['nginx_service_restart'],
+}
+
+exec { 'nginx_service_restart':
+  command     => '/usr/sbin/service nginx restart',
+  path        => ['/bin', '/usr/bin', '/sbin'],
+  refreshonly => true,
+  subscribe   => Exec['header_setup'],
+}

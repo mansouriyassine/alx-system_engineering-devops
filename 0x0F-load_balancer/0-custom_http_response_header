@@ -1,28 +1,33 @@
 #!/usr/bin/env bash
 # This script configures an Nginx server with a custom header 'X-Served-By'
+set -e
 
-# Update package list and install Nginx if not installed
-apt-get update -y
+# Update apt repositories
+apt-get update
+
+# Install Nginx 
 apt-get install -y nginx
 
-# Create a simple page for index.html
+# Create index page
 echo "Hello World!" > /var/www/html/index.nginx-debian.html
 
-# Set up a custom 404 page error
+# Create custom 404 page
 echo "Ceci n'est pas une page" > /usr/share/nginx/html/custom_404.html
 
-# Configure Nginx to serve the custom error page and add the 'X-Served-By' header
-# Ensure that configurations are idempotent: not repeated or duplicated upon multiple script runs
+# Add server redirect rule  
+sed -i '/server_name _;/a \\trewrite ^\/redirect_me https:\/\/github.com\/mansouriyassine permanent;' /etc/nginx/sites-available/default  
 
-# Add redirect and custom 404 page if not already present
-if ! grep -q "rewrite ^/redirect_me" /etc/nginx/sites-available/default; then
-    sed -i "/server_name _;/a \\\trewrite ^\/redirect_me https:\/\/github.com\/mansouriyassine permanent;\n\terror_page 404 \/custom_404.html;\n\tlocation = \/custom_404.html {\n\t\troot \/usr\/share\/nginx\/html;\n\t\tinternal;\n\t}" /etc/nginx/sites-available/default
-fi
+# Set up custom 404 error page
+sed -i '/server_name _;/a \\terror_page 404 \/custom_404.html;' /etc/nginx/sites-available/default
 
-# Add the custom header if not already present
-if ! grep -q "add_header X-Served-By" /etc/nginx/nginx.conf; then
-    sed -i "/http {/a \\\tadd_header X-Served-By \"\$HOSTNAME\";" /etc/nginx/nginx.conf
-fi
+# Create location block for custom 404 page  
+sed -i '/error_page 404 \/custom_404.html;/a \\tlocation = \/custom_404.html {\\n\\t\\troot \/usr\/share\/nginx\/html;\\n\\t\\tinternal;\\n\\t}' /etc/nginx/sites-available/default
 
-# Restart Nginx to apply changes
-service nginx restart
+# Add custom X-Served-By header
+sed -i '/http {/a \\tadd_header X-Served-By $HOSTNAME;' /etc/nginx/nginx.conf  
+
+# Check Nginx config
+nginx -t 
+
+# Restart Nginx to apply changes  
+systemctl restart nginx

@@ -1,22 +1,25 @@
 #!/usr/bin/env bash
-# for task 1 Installs and setup HAProxy
+# This is for task 1. script installs and sets up HAProxy as a load balancer
 
-# Install software properties common, add the HAProxy PPA, and install HAProxy
+# Update system pakcage list and install software properties tools
+apt-get update -y
 apt-get install -y software-properties-common
+
+# Add the official HAProxy PPA to the system
 add-apt-repository -y ppa:vbernat/haproxy-1.8
-apt-get -y update
+
+# Update the package list with the new PPA and install HAProxy
+apt-get update -y
 apt-get install -y haproxy=1.8.\*
 
-# Enable HAProxy to be run on system start
+# Configure HAProxy and start on boot
 echo "ENABLED=1" > /etc/default/haproxy
 
-# Configure HAProxy to load balance between your two web servers
+# Configure HAProxy in order to distribute traffic between the web servers
 cat <<EOF > /etc/haproxy/haproxy.cfg
 global
     log /dev/log local0
     log /dev/log local1 notice
-    chroot /var/lib/haproxy
-    stats timeout 30s
     user haproxy
     group haproxy
     daemon
@@ -29,13 +32,6 @@ defaults
     timeout connect 5000ms
     timeout client 50000ms
     timeout server 50000ms
-    errorfile 400 /etc/haproxy/errors/400.http
-    errorfile 403 /etc/haproxy/errors/403.http
-    errorfile 408 /etc/haproxy/errors/408.http
-    errorfile 500 /etc/haproxy/errors/500.http
-    errorfile 502 /etc/haproxy/errors/502.http
-    errorfile 503 /etc/haproxy/errors/503.http
-    errorfile 504 /etc/haproxy/errors/504.http
 
 frontend http_front
    bind *:80
@@ -48,5 +44,5 @@ backend http_back
    server 441617-web-02 54.174.187.4:80 check
 EOF
 
-# Restart HAProxy to apply the configuration
+# Restart HAProxy and apply configuration
 service haproxy restart

@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# This script initiates an SSH connection to Web-01 for quick access.
+
+# Start the ssh-agent in the background.
+eval "$(ssh-agent -s)"
+
+# Add your SSH private key to the ssh-agent.
+ssh-add ~/.ssh/school
+
+# Connect to the Web-01 server using its IP address.
+ssh ubuntu@3.90.85.41

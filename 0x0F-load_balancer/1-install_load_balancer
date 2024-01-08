@@ -1,48 +1,60 @@
 #!/usr/bin/env bash
-# This is for task 1. script installs and sets up HAProxy as a load balancer
+# This script installs and configures HAProxy to load balance traffic between two web servers
 
-# Update system pakcage list and install software properties tools
-apt-get update -y
-apt-get install -y software-properties-common
+# Exit script on any error
+set -e
 
-# Add the official HAProxy PPA to the system
-add-apt-repository -y ppa:vbernat/haproxy-1.8
+# Update the package list
+apt update 
 
-# Update the package list with the new PPA and install HAProxy
-apt-get update -y
-apt-get install -y haproxy=1.8.\*
+# Install HAProxy
+apt install -y haproxy
 
-# Configure HAProxy and start on boot
+# Optional: Install socat for HAProxy testing
+apt install -y socat
+
+# Enable HAProxy to start on system boot
 echo "ENABLED=1" > /etc/default/haproxy
 
-# Configure HAProxy in order to distribute traffic between the web servers
+# Create a new HAProxy configuration file with the following settings
 cat <<EOF > /etc/haproxy/haproxy.cfg
+# Global settings
 global
-    log /dev/log local0
+    log /dev/log local0 info
     log /dev/log local1 notice
+    chroot /var/lib/haproxy
+    stats timeout 30s
     user haproxy
     group haproxy
     daemon
 
+# Default settings for all 'listen' and 'backend' sections
 defaults
-    log global
     mode http
+    log global
     option httplog
     option dontlognull
-    timeout connect 5000ms
-    timeout client 50000ms
-    timeout server 50000ms
+    timeout connect 5000
+    timeout client  50000
+    timeout server  50000
 
-frontend http_front
-   bind *:80
-   stats uri /haproxy?stats
-   default_backend http_back
+# Frontend configuration
+frontend http-in
+    bind *:80 
+    stats enable
+    stats uri /haproxy?stats
+    default_backend webservers
 
-backend http_back
-   balance roundrobin
-   server 441617-web-01 3.90.85.41:80 check
-   server 441617-web-02 54.174.187.4:80 check
+# Backend configuration for load balancing
+backend webservers
+    balance roundrobin
+    option forwardfor
+    server web1 3.90.85.41:80 check
+    server web2 54.174.187.4:80 check    
 EOF
 
-# Restart HAProxy and apply configuration
-service haproxy restart
+# Validate HAProxy configuration file for any syntax errors
+haproxy -f /etc/haproxy/haproxy.cfg -c
+
+# Restart HAProxy to apply the new configuration
+systemctl restart haproxy

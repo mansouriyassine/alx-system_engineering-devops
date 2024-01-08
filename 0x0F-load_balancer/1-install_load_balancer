@@ -54,5 +54,13 @@ backend http_back
    server web-02 54.174.187.4:80 check
 EOF
 
-# Restart HAProxy to apply the changes
-sudo systemctl restart haproxy
+# Test HAProxy configuration
+sudo haproxy -c -V -f /etc/haproxy/haproxy.cfg
+
+# Restart HAProxy only if the configuration test was successful
+if [ $? -eq 0 ]; then
+    sudo systemctl restart haproxy
+else
+    echo "HAProxy configuration test failed. Not restarting HAProxy."
+    exit 1
+fi

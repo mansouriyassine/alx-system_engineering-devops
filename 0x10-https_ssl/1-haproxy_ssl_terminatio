@@ -1,0 +1,5 @@
+frontend http-frontend
+    bind *:80
+    mode http
+    option forwardfor
+    redirect scheme https code 301 if !{ ssl_fc }

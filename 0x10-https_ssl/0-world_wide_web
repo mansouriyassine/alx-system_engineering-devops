@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Script to display DNS records for given domain and subdomain
+
+# Function to get DNS record information
+get_dns_info() {
+    local subdomain=$1
+    local domain=$2
+    dig "$subdomain.$domain" | grep -A1 'ANSWER SECTION:' | awk -v subdomain="$subdomain" 'NR==2 { print "The subdomain " subdomain, "is a " $4, "record and points to " $5 }'
+}
+
+# Main script logic
+if [ "$#" -eq 1 ]; then
+    # Display info for default subdomains
+    for sub in "www" "lb-01" "web-01" "web-02"; do
+        get_dns_info "$sub" "$1"
+    done
+elif [ "$#" -eq 2 ]; then
+    # Display info for specified subdomain
+    get_dns_info "$2" "$1"
+else
+    echo "Usage: $0 domain [subdomain]"
+    exit 1
+fi

@@ -1,23 +1,38 @@
 #!/usr/bin/env bash
-# Script to display DNS records for given domain and subdomain
+# Script to audit domain and subdomain DNS records
+# Usage: ./script_name domain [subdomain]
 
-# Function to get DNS record information
-get_dns_info() {
-    local subdomain=$1
-    local domain=$2
-    dig "$subdomain.$domain" | grep -A1 'ANSWER SECTION:' | awk -v subdomain="$subdomain" 'NR==2 { print "The subdomain " subdomain, "is a " $4, "record and points to " $5 }'
+# Function to fetch and display DNS record information
+fetch_dns_record() {
+    local domain_name=$1
+    local subdomain_name=$2
+
+    # Fetching DNS records using dig
+    local dns_output=$(dig +noall +answer "$subdomain_name.$domain_name")
+
+    # Extracting and displaying relevant information
+    if [[ $dns_output ]]; then
+        local record_type=$(echo "$dns_output" | awk '{print $4}')
+        local record_dest=$(echo "$dns_output" | awk '{print $5}')
+        echo "The subdomain $subdomain_name is a $record_type record and points to $record_dest"
+    else
+        echo "No DNS record found for $subdomain_name.$domain_name"
+    fi
 }
 
-# Main script logic
-if [ "$#" -eq 1 ]; then
-    # Display info for default subdomains
-    for sub in "www" "lb-01" "web-01" "web-02"; do
-        get_dns_info "$sub" "$1"
+# Main execution block
+if [[ $# -eq 1 ]]; then
+    # Default subdomains to check
+    declare -a default_subdomains=("www" "lb-01" "web-01" "web-02")
+
+    # Iterating over default subdomains
+    for subdomain in "${default_subdomains[@]}"; do
+        fetch_dns_record "$1" "$subdomain"
     done
-elif [ "$#" -eq 2 ]; then
-    # Display info for specified subdomain
-    get_dns_info "$2" "$1"
+elif [[ $# -eq 2 ]]; then
+    # Checking specified subdomain
+    fetch_dns_record "$1" "$2"
 else
-    echo "Usage: $0 domain [subdomain]"
+    echo "Invalid arguments. Usage: $0 domain [subdomain]"
     exit 1
 fi

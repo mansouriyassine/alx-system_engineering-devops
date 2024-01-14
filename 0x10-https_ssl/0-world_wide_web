@@ -1,38 +1,28 @@
 #!/usr/bin/env bash
-# Script to audit domain and subdomain DNS records
-# Usage: ./script_name domain [subdomain]
+# Script to query and display DNS record details for specified domain and subdomain
+# Usage: ./custom_dns_info.sh <domain> [subdomain]
 
-# Function to fetch and display DNS record information
-fetch_dns_record() {
-    local domain_name=$1
-    local subdomain_name=$2
+# Function to extract and display DNS information
+fetch_dns_details() {
+    local main_domain=$1
+    local target_subdomain=$2
 
-    # Fetching DNS records using dig
-    local dns_output=$(dig +noall +answer "$subdomain_name.$domain_name")
+    dns_info=$(dig +noall +answer "$target_subdomain.$main_domain" | awk '{if (NR==1) print $1, $4, $5}')
 
-    # Extracting and displaying relevant information
-    if [[ $dns_output ]]; then
-        local record_type=$(echo "$dns_output" | awk '{print $4}')
-        local record_dest=$(echo "$dns_output" | awk '{print $5}')
-        echo "The subdomain $subdomain_name is a $record_type record and points to $record_dest"
+    if [[ -n $dns_info ]]; then
+        echo "The subdomain $target_subdomain is a $(echo $dns_info | awk '{print $2}') record and points to $(echo $dns_info | awk '{print $3}')"
     else
-        echo "No DNS record found for $subdomain_name.$domain_name"
+        echo "No DNS record found for $target_subdomain.$main_domain"
     fi
 }
 
-# Main execution block
-if [[ $# -eq 1 ]]; then
-    # Default subdomains to check
-    declare -a default_subdomains=("www" "lb-01" "web-01" "web-02")
-
-    # Iterating over default subdomains
-    for subdomain in "${default_subdomains[@]}"; do
-        fetch_dns_record "$1" "$subdomain"
+if [ "$#" -eq 1 ]; then
+    for sub in "www" "lb-01" "web-01" "web-02"; do
+        fetch_dns_details "$1" "$sub"
     done
-elif [[ $# -eq 2 ]]; then
-    # Checking specified subdomain
-    fetch_dns_record "$1" "$2"
+elif [ "$#" -eq 2 ]; then
+    fetch_dns_details "$1" "$2"
 else
-    echo "Invalid arguments. Usage: $0 domain [subdomain]"
+    echo "Invalid usage. Please provide a domain and optionally a subdomain."
     exit 1
 fi

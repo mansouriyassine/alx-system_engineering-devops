@@ -1,29 +1,33 @@
 #!/usr/bin/env bash
-# Script to query and display DNS record details for specified domain and subdomain
+# Bash script to display DNS records: record type, IP, subdomains
 
-# Function to extract and display DNS information
-fetch_dns_details() {
-    local main_domain=$1
-    local target_subdomain=$2
+# Function to print the DNS record information
+print_rec() {
+    local domain=$1
+    local subdomain=$2
+    local full_domain="$subdomain.$domain"
 
-    # Using dig to fetch the DNS record
-    dns_info=$(dig +short "$target_subdomain.$main_domain")
+    # Fetch the record type
+    local record_type=$(dig "$full_domain" | grep -A1 'ANSWER SECTION:' | awk 'NR==2 {print $4}')
 
-    if [[ -n $dns_info ]]; then
-        echo "The subdomain $target_subdomain is a A record and points to $dns_info"
+    # Fetch the IP address
+    local ip_address=$(dig "$full_domain" | grep -A1 'ANSWER SECTION:' | awk 'NR==2 {print $5}')
+
+    # Check if record type and IP address are found
+    if [ -n "$record_type" ] && [ -n "$ip_address" ]; then
+        echo "The subdomain $subdomain is a $record_type record and points to $ip_address"
     else
-        echo "No DNS record found for $target_subdomain.$main_domain"
+        echo "No DNS record found for $full_domain"
     fi
 }
 
-# Main script execution
-if [ "$#" -eq 1 ]; then
-    for sub in "www" "lb-01" "web-01" "web-02"; do
-        fetch_dns_details "$1" "$sub"
+# Main execution
+if [ -z "$2" ]; then
+    # Loop through predefined subdomains
+    for subs in "www" "lb-01" "web-01" "web-02"; do
+        print_rec "$1" "$subs"
     done
-elif [ "$#" -eq 2 ]; then
-    fetch_dns_details "$1" "$2"
 else
-    echo "Invalid usage. Please provide a domain and optionally a subdomain."
-    exit 1
+    # Process a specific subdomain
+    print_rec "$1" "$2"
 fi

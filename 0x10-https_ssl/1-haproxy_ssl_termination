@@ -2,19 +2,16 @@ global
     log /dev/log local0
     log /dev/log local1 notice
     chroot /var/lib/haproxy
-    stats socket /run/haproxy/admin.sock mode 660 level admin expose-fd listeners
+    stats socket /run/haproxy/admin.sock mode 660 level admin
     stats timeout 30s
     user haproxy
     group haproxy
     daemon
-
-    # Default SSL material locations
+    maxconn 2048
+    tune.ssl.default-dh-param 2048
     ca-base /etc/ssl/certs
     crt-base /etc/ssl/private
-
-    # See: https://ssl-config.mozilla.org/#server=haproxy
-    ssl-default-bind-ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384
-    ssl-default-bind-ciphersuites TLS_AES_128_GCM_SHA256:TLS_AES_256_GCM_SHA384:TLS_CHACHA20_POLY1305_SHA256
+    ssl-default-bind-ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384
     ssl-default-bind-options ssl-min-ver TLSv1.2 no-tls-tickets
 
 defaults
@@ -34,16 +31,15 @@ defaults
     errorfile 504 /etc/haproxy/errors/504.http
 
 frontend www-http
-    bind 0.0.0.0:80
-    http-request set-header X-Forwarded-Proto http
-    redirect scheme https code 301 if !{ ssl_fc }
-    default_backend www-backend
-
-frontend www-https
-    bind 0.0.0.0:443 ssl crt /etc/haproxy/certs/mansouriyassine.tech.pem
-    http-request set-header X-Forwarded-Proto https
+    bind *:80
     acl letsencrypt-acl path_beg /.well-known/acme-challenge/
     use_backend letsencrypt-backend if letsencrypt-acl
+    http-request set-header X-Forwarded-Proto http
+    redirect scheme https code 301 if !{ ssl_fc }
+
+frontend www-https
+    bind *:443 ssl crt /etc/haproxy/certs/www.mansouriyassine.tech.pem
+    http-request set-header X-Forwarded-Proto https
     default_backend www-backend
 
 backend www-backend
@@ -52,4 +48,4 @@ backend www-backend
     server 441617-web-02 54.174.187.4:80 check
 
 backend letsencrypt-backend
-    server letsencrypt 127.0.0.1:8080
+    server letsencrypt 127.0.0.1:54321

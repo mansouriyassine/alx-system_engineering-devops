@@ -1,21 +1,22 @@
 #!/usr/bin/env bash
 # Script to query and display DNS record details for specified domain and subdomain
-# Usage: ./custom_dns_info.sh <domain> [subdomain]
 
 # Function to extract and display DNS information
 fetch_dns_details() {
     local main_domain=$1
     local target_subdomain=$2
 
-    dns_info=$(dig +noall +answer "$target_subdomain.$main_domain" | awk '{if (NR==1) print $1, $4, $5}')
+    # Using dig to fetch the DNS record
+    dns_info=$(dig +short "$target_subdomain.$main_domain")
 
     if [[ -n $dns_info ]]; then
-        echo "The subdomain $target_subdomain is a $(echo $dns_info | awk '{print $2}') record and points to $(echo $dns_info | awk '{print $3}')"
+        echo "The subdomain $target_subdomain is a A record and points to $dns_info"
     else
         echo "No DNS record found for $target_subdomain.$main_domain"
     fi
 }
 
+# Main script execution
 if [ "$#" -eq 1 ]; then
     for sub in "www" "lb-01" "web-01" "web-02"; do
         fetch_dns_details "$1" "$sub"

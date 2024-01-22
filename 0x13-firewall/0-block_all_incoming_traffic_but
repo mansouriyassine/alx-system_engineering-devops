@@ -1,0 +1,21 @@
+nstall UFW - The user may need to execute this if UFW is not installed
+sudo apt update
+sudo apt install ufw -y
+
+# Enable UFW
+sudo ufw enable
+
+# Set UFW to deny all incoming traffic by default
+sudo ufw default deny incoming
+
+# Allow incoming SSH connections
+sudo ufw allow 22/tcp
+
+# Allow incoming HTTPS connections
+sudo ufw allow 443/tcp
+
+# Allow incoming HTTP connections
+sudo ufw allow 80/tcp
+
+# Enable the firewall rules
+sudo ufw reload

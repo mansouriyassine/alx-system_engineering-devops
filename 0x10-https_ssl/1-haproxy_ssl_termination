@@ -1,22 +1,30 @@
-global
+
+bal
     log /dev/log local0
     log /dev/log local1 notice
     chroot /var/lib/haproxy
+    stats socket /run/haproxy/admin.sock mode 660 level admin
+    stats timeout 30s
     user haproxy
     group haproxy
     daemon
-    maxconn 2048
-    ssl-default-bind-ciphers PROFILE=SYSTEM
-    ssl-default-bind-options ssl-min-ver TLSv1.2
+
+    # Default SSL material locations
+    ca-base /etc/ssl/certs
+    crt-base /etc/ssl/private
+
+    # SSL options
+    ssl-default-bind-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS
+    ssl-default-bind-options no-sslv3
 
 defaults
-    log     global
-    mode    http
-    option  httplog
-    option  dontlognull
-    timeout connect 5000ms
-    timeout client  50000ms
-    timeout server  50000ms
+    log global
+    mode http
+    option httplog
+    option dontlognull
+    timeout connect 5000
+    timeout client 50000
+    timeout server 50000
     errorfile 400 /etc/haproxy/errors/400.http
     errorfile 403 /etc/haproxy/errors/403.http
     errorfile 408 /etc/haproxy/errors/408.http
@@ -25,12 +33,11 @@ defaults
     errorfile 503 /etc/haproxy/errors/503.http
     errorfile 504 /etc/haproxy/errors/504.http
 
-frontend www-https
-    bind *:443 ssl crt /etc/haproxy/certs/www.mansouriyassine.tech.pem
-    reqadd X-Forwarded-Proto:\ https
+frontend https_frontend
+    bind *:443 ssl crt /etc/letsencrypt/live/www.mansouriyassine.tech/fullchain.pem
     default_backend web_servers
 
 backend web_servers
     balance roundrobin
-    server web1 3.90.85.41:80 check
-    server web2 54.174.187.4:80 check
+    server web1 100.27.2.233:80 check
+    server web2 54.145.81.57:80 check

@@ -31,11 +31,11 @@ def export_to_json(users):
         username = user['username']
         todos = fetch_todos_for_user(user_id)
         all_todos[user_id] = [
-            {"username": username, "task": todo['title'], 
-             "completed": todo['completed']} 
+            {"username": username, "task": todo['title'],
+             "completed": todo['completed']}
             for todo in todos
         ]
-    
+
     with open('todo_all_employees.json', 'w') as file:
         json.dump(all_todos, file)
 

@@ -1,13 +1,20 @@
 #!/usr/bin/python3
 """
-This script uses the JSONPlaceholder API to fetch the TODO list of an
-employee based on their ID and exports it to a CSV file. The CSV file
-will contain records of all tasks owned by this employee with their
-completion status.
+This module uses the JSONPlaceholder API to fetch the TODO list of an
+employee based on their ID and exports it to a CSV file. It retrieves
+the employee's task information and exports it in a CSV format with
+the structure "USER_ID","USERNAME","TASK_COMPLETED_STATUS","TASK_TITLE".
+
+The script accepts an employee ID as a command-line argument and creates
+a CSV file named after the user's ID containing their TODO list.
+
+Usage:
+    python3 1-export_to_CSV.py [employee_id]
+    example: python3 1-export_to_CSV.py 2
 """
 
-import requests
 import csv
+import requests
 import sys
 
 

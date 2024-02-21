@@ -1,0 +1,77 @@
+[?1049h[22;0;0t[>4;2m[?1h=[?2004h[1;50r[?12h[?12l[22;2t[22;1t[27m[23m[29m[m[H[2J[?25l[50;1H"" [New File][1;1H[34m" ============================================================================
+" Netrw Directory Listing                                        [m[36m(netrw v165)[m
+[34m"   /home/yassine/alx-system_engineering-devops
+"   Sorted by[m[38;5;130m      name[m
+[34m"   Sort sequence:[m[38;5;130m [\/]$[m[34m,[m[38;5;130m\<core\%(\.\d\+\)\=\>[m[34m,[m[38;5;130m\.h$[m[34m,[m[38;5;130m\.c$[m[34m,[m[38;5;130m\.cpp$[m[34m,[m[38;5;130m\~\=\*$[m[34m,[m[38;5;130m*[m[34m,[m[38;5;130m\.o$[m[34m,[m[38;5;130m\.obj$[m[34m,[m[38;5;130m\.info$[m[34m,[m[38;5;130m\.swp$[m[34m,[m[38;5;130m\.bak$[m[34m,[m[38;5;130m\~$[m
+[34m"   Quick Help: [m[36m<F1>[m[35m:[mhelp  [36m-[m[35m:[mgo up dir  [36mD[m[35m:[mdelete  [36mR[m[35m:[mrename  [36ms[m[35m:[msort-by  [36mx[m[35m:[mspecial
+[34m" ==============================================================================[m
+[4m[34m..[m[4m[36m/[m[4m                                                                                                                                                                                                                [m[9;1H[34m.[m[36m/[m
+[34m.git[m[36m/[m
+[34m0x00-shell_basics[m[36m/[m
+[34m0x01-shell_permissions[m[36m/[m
+[34m0x02-shell_redirections[m[36m/[m
+[34m0x03-shell_variables_expansions[m[36m/[m
+[34m0x04-loops_conditions_and_parsing[m[36m/[m
+[34m0x05-processes_and_signals[m[36m/[m
+[34m0x06-regular_expressions[m[36m/[m
+[34m0x07-networking_basics[m[36m/[m
+[34m0x08-networking_basics_2[m[36m/[m
+[34m0x0A-configuration_management[m[36m/[m
+[34m0x0B-ssh[m[36m/[m
+[34m0x0C-web_server[m[36m/[m
+[34m0x0D-web_stack_debugging_0[m[36m/[m
+[34m0x0E-web_stack_debugging_1[m[36m/[m
+[34m0x0F-load_balancer[m[36m/[m
+[34m0x10-https_ssl[m[36m/[m
+[34m0x11-what_happens_when_your_type_google_com_in_your_browser_and_press_enter[m[36m/[m
+[34m0x12-web_stack_debugging_2[m[36m/[m
+[34m0x13-firewall[m[36m/[m
+[34m0x14-mysql[m[36m/[m
+[34m0x15-api[m[36m/[m
+[34m0x16-api_advanced[m[36m/[m
+[34m0x17-web_stack_debugging_3[m[36m/[m
+[34m0x19-postmortem[m[36m/[m
+[35mweb-01[m[36m*[m
+[35mweb-02[m[36m*[m
+README.md
+sudo
+[94m~                                                                                                                                                                                                                  [40;1H~                                                                                                                                                                                                                  [41;1H~                                                                                                                                                                                                                  [42;1H~                                                                                                                                                                                                                  [43;1H~                                                                                                                                                                                                                  [44;1H~                                                                                                                                                                                                                  [45;1H~                                                                                                                                                                                                                  [46;1H~                                                                                                                                                                                                                  [47;1H~                                                                                                                                                                                                                  [48;1H~                                                                                                                                                                                                                  [49;1H~                                                                                                                                                                                                                  [m[50;194H8,1[11CAll[8;1H[?25h[?25l[50;184H^[[8;1H[50;184H  [8;1H[50;184H^[[8;1H[50;184H  [8;1H[?25h[?25l[50;184H^[[8;1H[50;184H  [8;1H[50;184H^[[8;1H[50;184H  [8;1H[?25h[?25l[50;184H^[[8;1H[50;184H  [8;1H[50;184H^[[8;1H[50;184H  [8;1H[?25h[?25l[50;184H^[[8;1H[50;184H  [8;1H[50;184H^[[8;1H[50;184H  [8;1H[?25h[27m[23m[29m[m[H[2J[?25l[1;1H[34m" ============================================================================
+" Netrw Directory Listing                                        [m[36m(netrw v165)[m
+[34m"   /home/yassine/alx-system_engineering-devops
+"   Sorted by[m[38;5;130m      name[m
+[34m"   Sort sequence:[m[38;5;130m [\/]$[m[34m,[m[38;5;130m\<core\%(\.\d\+\)\=\>[m[34m,[m[38;5;130m\.h$[m[34m,[m[38;5;130m\.c$[m[34m,[m[38;5;130m\.cpp$[m[34m,[m[38;5;130m\~\=\*$[m[34m,[m[38;5;130m*[m[34m,[m[38;5;130m\.o$[m[34m,[m[38;5;130m\.obj$[m[34m,[m[38;5;130m\.info$[m[34m,[m[38;5;130m\.swp$[m[34m,[m[38;5;130m\.bak$[m[34m,[m[38;5;130m\~$[m
+[34m"   Quick Help: [m[36m<F1>[m[35m:[mhelp  [36m-[m[35m:[mgo up dir  [36mD[m[35m:[mdelete  [36mR[m[35m:[mrename  [36ms[m[35m:[msort-by  [36mx[m[35m:[mspecial
+[34m" ==============================================================================[m
+[4m[34m..[m[4m[36m/[m[4m                                                                                                                                                                                                                                          [m[9;1H[34m.[m[36m/[m
+[34m.git[m[36m/[m
+[34m0x00-shell_basics[m[36m/[m
+[34m0x01-shell_permissions[m[36m/[m
+[34m0x02-shell_redirections[m[36m/[m
+[34m0x03-shell_variables_expansions[m[36m/[m
+[34m0x04-loops_conditions_and_parsing[m[36m/[m
+[34m0x05-processes_and_signals[m[36m/[m
+[34m0x06-regular_expressions[m[36m/[m
+[34m0x07-networking_basics[m[36m/[m
+[34m0x08-networking_basics_2[m[36m/[m
+[34m0x0A-configuration_management[m[36m/[m
+[34m0x0B-ssh[m[36m/[m
+[34m0x0C-web_server[m[36m/[m
+[34m0x0D-web_stack_debugging_0[m[36m/[m
+[34m0x0E-web_stack_debugging_1[m[36m/[m
+[34m0x0F-load_balancer[m[36m/[m
+[34m0x10-https_ssl[m[36m/[m
+[34m0x11-what_happens_when_your_type_google_com_in_your_browser_and_press_enter[m[36m/[m
+[34m0x12-web_stack_debugging_2[m[36m/[m
+[34m0x13-firewall[m[36m/[m
+[34m0x14-mysql[m[36m/[m
+[34m0x15-api[m[36m/[m
+[34m0x16-api_advanced[m[36m/[m
+[34m0x17-web_stack_debugging_3[m[36m/[m
+[34m0x19-postmortem[m[36m/[m
+[35mweb-01[m[36m*[m
+[35mweb-02[m[36m*[m
+README.md
+sudo
+[94m~                                                                                                                                                                                                                                            [40;1H~                                                                                                                                                                                                                                            [41;1H~                                                                                                                                                                                                                                            [42;1H~                                                                                                                                                                                                                                            [43;1H~                                                                                                                                                                                                                                            [44;1H~                                                                                                                                                                                                                                            [45;1H~                                                                                                                                                                                                                                            [46;1H~                                                                                                                                                                                                                                            [47;1H~                                                                                                                                                                                                                                            [48;1H~                                                                                                                                                                                                                                            [49;1H~                                                                                                                                                                                                                                            [50;1H~                                                                                                                                                                                                                                            [51;1H~                                                                                                                                                                                                                                            [52;1H~                                                                                                                                                                                                                                            [53;1H~                                                                                                                                                                                                                                            [54;1H~                                                                                                                                                                                                                                            [m[55;220H8,1[11CAll[8;1H[?25h[?25l[55;210H^[[8;1H[55;210H  [8;1H[55;210H^[[8;1H[55;210H  [8;1H[?25h[?25l[55;210H^[[8;1H[55;210H  [8;1H[55;210H^[[8;1H[55;210H  [8;1H[?25h[?25l[55;210H^[[8;1H[55;210H  [8;1H[55;210H^[[8;1H[55;210H  [8;1H[?25h[?25l[55;210H^[[8;1H[55;210H  [8;1H[55;210H^[[8;1H[55;210H  [8;1H[?25h[?25l[55;210H^[[8;1H[55;210H  [8;1H[55;210H^[[8;1H[55;210H  [8;1H[?25h[55;1H[?2004l[?2004l[?1l>[>4;m[?1049l[23;0;0tVim: Error reading input, exiting...
+Vim: Finished.
+[55;1H[J[23;2t[23;1t[J2 files to edit

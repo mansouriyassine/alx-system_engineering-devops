@@ -8,12 +8,17 @@ import requests
 
 def number_of_subscribers(subreddit):
     """Returns the number of subscribers for a given subreddit."""
-    user_agent = "Python:SubredditSubscribers:v1.0 (by /u/yourusername)"
+    user_agent = ("Python:SubredditSubscribers:v1.0 "
+                  "(by /u/yourusername)")
     headers = {"User-Agent": user_agent}
-    url = "https://www.reddit.com/r/{}/about.json".format(subreddit)
+    base_url = "https://www.reddit.com/r/"
+    about_ext = "/about.json"
+    url = f"{base_url}{subreddit}{about_ext}"
     response = requests.get(url, headers=headers, allow_redirects=False)
 
     if response.status_code == 200:
-        return response.json().get("data").get("subscribers")
+        data = response.json().get("data")
+        subscribers = data.get("subscribers")
+        return subscribers
     else:
         return 0

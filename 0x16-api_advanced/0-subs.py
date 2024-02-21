@@ -6,15 +6,14 @@ of subscribers for a given subreddit
 import requests
 
 
-def top_ten(subreddit):
-    """Prints the titles of the posts top 10 for a given subreddit"""
-
-    url = "https://www.reddit.com/r/{}/hot.json".format(subreddit)
-    headers = {"User-Agent": "Test"}
+def number_of_subscribers(subreddit):
+    """Returns the number of subscribers for a given subreddit."""
+    user_agent = "Python:SubredditSubscribers:v1.0 (by /u/yourusername)"
+    headers = {"User-Agent": user_agent}
+    url = "https://www.reddit.com/r/{}/about.json".format(subreddit)
     response = requests.get(url, headers=headers, allow_redirects=False)
+
     if response.status_code == 200:
-        for i in range(10):
-            print(response.json().get("data").get("children")[i]
-                  .get("data").get("title"))
+        return response.json().get("data").get("subscribers")
     else:
-        print(None)
+        return 0

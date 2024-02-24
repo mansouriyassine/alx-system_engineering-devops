@@ -1,0 +1,17 @@
+#!/bin/bash
+
+# Get the PID of the master Gunicorn process
+MASTER_PID=$(pgrep -f '/usr/local/bin/gunicorn.*web_dynamic.2-hbnb:app')
+echo "Master PID: $MASTER_PID"
+
+# Log the current number of workers
+echo "Current number of workers:"
+pgrep -fc '/usr/local/bin/gunicorn.*web_dynamic.2-hbnb:app'
+
+# Gracefully restart the Gunicorn workers
+echo "Restarting Gunicorn..."
+kill -s HUP $MASTER_PID
+
+# Log the new number of workers after the restart
+echo "New number of workers after restart:"
+pgrep -fc '/usr/local/bin/gunicorn.*web_dynamic.2-hbnb:app'

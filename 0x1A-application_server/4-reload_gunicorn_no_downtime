@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # Reloads Gunicorn gracefully
 
 # Retrieve the PID of the master Gunicorn process

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Reloads Gunicorn gracefully
+# Reloads Gunicorn gracefully - task7
 
 # Retrieve the PID of the master Gunicorn process
 master_pid=$(pgrep -f 'gunicorn: master')
@@ -8,13 +8,11 @@ master_pid=$(pgrep -f 'gunicorn: master')
 current_workers=$(pgrep -c -f 'gunicorn: worker')
 
 echo "Master PID: $master_pid"
-echo "$current_workers"
-echo "Current number of workers:"
-echo "$current_workers"
+echo "Current number of workers: $current_workers"
 
 # Restart Gunicorn
 echo "Restarting Gunicorn..."
-kill -HUP "$master_pid"
+kill -s HUP "$master_pid"
 
 # Wait for the new workers to be spawned
 sleep 2
@@ -22,5 +20,4 @@ sleep 2
 # Retrieve the new number of workers
 new_workers=$(pgrep -c -f 'gunicorn: worker')
 
-echo "New number of workers after restart:"
-echo "$new_workers"
+echo "New number of workers after restart: $new_workers"

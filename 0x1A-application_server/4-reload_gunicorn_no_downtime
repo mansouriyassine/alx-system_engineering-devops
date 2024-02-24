@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
-# Reloads Gunicorn gracefully - task7
+# Reloads Gunicorn gracefully
 
 # Retrieve the PID of the master Gunicorn process
 master_pid=$(pgrep -f 'gunicorn: master')
+
+if [[ -z "$master_pid" ]]; then
+    echo "Error: Master process not found."
+    exit 1
+fi
 
 # Retrieve the current number of workers
 current_workers=$(pgrep -c -f 'gunicorn: worker')
@@ -15,7 +20,8 @@ echo "Restarting Gunicorn..."
 kill -s HUP "$master_pid"
 
 # Wait for the new workers to be spawned
-sleep 2
+echo "Waiting for new workers to spawn..."
+sleep 5  # Adjust the sleep time as needed
 
 # Retrieve the new number of workers
 new_workers=$(pgrep -c -f 'gunicorn: worker')
